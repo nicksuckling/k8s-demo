@@ -20,8 +20,12 @@ build: ## Build docker image
 
 deploy: ## Deploy container
 	 env VERSION=$(VERSION) aws-vault exec megaloop -- kd --context=$(CLUSTER) \
-		--file k8s/ --namespace default
+    	--file k8s/ --namespace default
 release: build deploy
+
+clean: ## Clean environment
+	 env VERSION=$(VERSION) aws-vault exec megaloop --\
+    	kubectl delete -f k8s/
 
 git-tag: ## Create release and tag
 	git tag -s -a v$(VERSION) -m "v$(VERSION)"
